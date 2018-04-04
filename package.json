@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/tsoliangwu0130/my-graphql-api#readme",
   "dependencies": {
+    "express": "^4.16.3",
+    "express-graphql": "^0.6.12",
     "graphql": "^0.13.2"
   }
 }
