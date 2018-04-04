@@ -2,19 +2,40 @@ const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const { buildSchema } = require('graphql');
 
+
 var schema = buildSchema(`
+  type RandomDice {
+    numSides: Int!
+    rollOnce: Int!
+    roll(numRolls: Int!): [Int]
+  }
+
   type Query {
-    rollDice(numDice: Int! numSides: Int): [Int]
+    getDice(numSides: Int): RandomDice
   }
 `);
 
-var root = {
-  rollDice: function({ numDice, numSides }) {
+class RandomDice {
+  constructor(numSides) {
+    this.numSides = numSides;
+  }
+
+  rollOnce() {
+    return 1 + Math.floor(Math.random() * (this.numSides));
+  }
+
+  roll({ numRolls }) {
     var output = [];
-    for (var i = 0; i < numDice; i++) {
-      output.push(1 + Math.floor(Math.random() * (numSides || 6)));
+    for (var i = 0; i < numRolls; i++) {
+      output.push(this.rollOnce());
     }
     return output;
+  }
+}
+
+var root = {
+  getDice: function({ numSides }) {
+    return new RandomDice(numSides || 6)
   }
 };
 
