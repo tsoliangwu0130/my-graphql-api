@@ -1,0 +1,22 @@
+{
+  "name": "my-graphql-api",
+  "version": "1.0.0",
+  "description": "My first GraphQL API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tsoliangwu0130/my-graphql-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tsoliangwu0130/my-graphql-api/issues"
+  },
+  "homepage": "https://github.com/tsoliangwu0130/my-graphql-api#readme",
+  "dependencies": {
+    "graphql": "^0.13.2"
+  }
+}
