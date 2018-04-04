@@ -4,17 +4,22 @@ const { buildSchema } = require('graphql');
 
 var schema = buildSchema(`
   type Query {
-    hello: String,
-    name: String
+    quoteOfTheDay: String,
+    random: Float!
+    rollThreeDice: [Int]
   }
 `);
 
 var root = {
-  hello: () => {
-    return 'Hello GraphQL!';
+  quoteOfTheDay: () => {
+    var randomNum = Math.random();
+    return randomNum < 0.5 ? `${randomNum} < 0.5` : `${randomNum} > 0.5`;
   },
-  name: () => {
-    return 'Leon';
+  random: () => {
+    return Math.random();
+  },
+  rollThreeDice: () => {
+    return [1, 2, 3].map(_ => 1 + Math.floor(Math.random() * 6))
   }
 };
 
