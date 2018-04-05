@@ -4,38 +4,56 @@ const { buildSchema } = require('graphql');
 
 
 var schema = buildSchema(`
-  type RandomDice {
-    numSides: Int!
-    rollOnce: Int!
-    roll(numRolls: Int!): [Int]
+  input MessageInput {
+    content: String
+    author: String
+  }
+
+  type Message {
+    id: ID!
+    content: String
+    author: String
+  }
+
+  type Mutation {
+    createMessage(input: MessageInput): Message
+    updateMessage(id: ID!, input: MessageInput): Message
   }
 
   type Query {
-    getDice(numSides: Int): RandomDice
+    getMessage(id: ID!): Message
   }
 `);
 
-class RandomDice {
-  constructor(numSides) {
-    this.numSides = numSides;
-  }
-
-  rollOnce() {
-    return 1 + Math.floor(Math.random() * (this.numSides));
-  }
-
-  roll({ numRolls }) {
-    var output = [];
-    for (var i = 0; i < numRolls; i++) {
-      output.push(this.rollOnce());
-    }
-    return output;
+class Message {
+  constructor(id, { content, author }) {
+    this.id = id;
+    this.content = content;
+    this.author = author;
   }
 }
 
+var fakeDatabase = {};
 var root = {
-  getDice: function({ numSides }) {
-    return new RandomDice(numSides || 6)
+  getMessage: function ({ id }) {
+    if (!fakeDatabase[id]) {
+      throw new Error(`no message found with id ${id}`);
+    } else {
+      return new Message(id, fakeDatabase[id]);
+    }
+  },
+  createMessage: function({ input }) {
+    var id = require('crypto').randomBytes(10).toString('hex');
+    fakeDatabase[id] = input;
+    return new Message(id, input);
+  },
+  updateMessage: function({ id, input }) {
+    if (!fakeDatabase[id]) {
+      throw new Error(`no message found with id ${id}`);
+    } else {
+      fakeDatabase[id] = input;
+      return new Message(id, input);
+    }
   }
 };
 
